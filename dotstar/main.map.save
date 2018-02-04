@@ -1,0 +1,101 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+flash            0x08000000         0x00004000
+ram              0x20000000         0x00001000
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD init.o
+LOAD main.o
+                0x08000000                . = ORIGIN (flash)
+
+.text           0x08000000      0x254
+ *(.vectors)
+ .vectors       0x08000000       0xb4 init.o
+                0x08000000                Vectors
+ *(.text)
+ .text          0x080000b4       0x7c init.o
+                0x080000b4                init
+                0x08000128                Default_Handler
+ .text          0x08000130      0x124 main.o
+                0x08000130                delay
+                0x0800014c                initClock
+                0x080001e8                configPins
+                0x08000204                main
+                0x08000254                . = ALIGN (0x4)
+
+.glue_7         0x08000254        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x08000254        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x08000254        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x08000254        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.iplt           0x08000254        0x0
+ .iplt          0x00000000        0x0 init.o
+
+.rel.dyn        0x08000254        0x0
+ .rel.iplt      0x00000000        0x0 init.o
+
+.rodata         0x08000254        0x0
+ *(.rodata)
+                0x08000254                . = ALIGN (0x4)
+                0x20000000                . = ORIGIN (ram)
+
+.data           0x20000000        0x0 load address 0x08000254
+                0x08000254                INIT_DATA_VALUES = LOADADDR (.data)
+                0x20000000                INIT_DATA_START = .
+ *(.data)
+ .data          0x20000000        0x0 init.o
+ .data          0x20000000        0x0 main.o
+                0x20000000                INIT_DATA_END = .
+                0x20000000                BSS_START = .
+
+.igot.plt       0x20000000        0x0 load address 0x08000254
+ .igot.plt      0x00000000        0x0 init.o
+
+.bss            0x20000000        0x0 load address 0x08000254
+ *(.bss)
+ .bss           0x20000000        0x0 init.o
+ .bss           0x20000000        0x0 main.o
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                BSS_END = .
+LOAD /usr/local/gcc-arm-none-eabi/lib/gcc/arm-none-eabi/4.8.4/armv6-m/libgcc.a
+OUTPUT(main.elf elf32-littlearm)
+
+.comment        0x00000000       0x70
+ .comment       0x00000000       0x70 init.o
+                                 0x71 (size before relaxing)
+ .comment       0x00000000       0x71 main.o
+
+.ARM.attributes
+                0x00000000       0x31
+ .ARM.attributes
+                0x00000000       0x31 init.o
+ .ARM.attributes
+                0x00000031       0x31 main.o
+
+Cross Reference Table
+
+Symbol                                            File
+BSS_END                                           init.o
+BSS_START                                         init.o
+Default_Handler                                   init.o
+INIT_DATA_END                                     init.o
+INIT_DATA_START                                   init.o
+INIT_DATA_VALUES                                  init.o
+Vectors                                           init.o
+configPins                                        main.o
+delay                                             main.o
+init                                              init.o
+initClock                                         main.o
+main                                              main.o
+                                                  init.o
