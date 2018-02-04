@@ -1,5 +1,5 @@
 // This is a test program that controls an array of 3 dotstar LED's over SPI.
-// The LEDsare controlled using a data frame that begins with a sequence of the following
+// The LEDs are controlled using a data frame that begins with a sequence of the following
 // form
 // 0x00 0x00 0x00 0x00 ii bb gg rr 0xff 0xff 0xff 0xff
 // The leading 4 zeros are a start of data frame delimiter.
@@ -173,7 +173,7 @@ int main()
 		delay(40000);
 		GPIOA_ODR &= ~BIT4; // LED off
 		delay(40000);
-        doRainbow(0x1);
+        doRainbow(15); // half brightness
 	} 
 	return 0;
 }
